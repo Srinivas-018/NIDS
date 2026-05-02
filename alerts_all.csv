@@ -1,0 +1,4 @@
+timestamp,alert_type,src_ip,dst_ip,details
+2026-05-02T09:39:20Z,Port Scan,10.10.10.5,10.10.10.1,10.10.10.5 hit 8 unique ports in <1s toward 10.10.10.1
+2026-05-02T09:39:20Z,SYN Flood,10.10.10.6,10.10.10.1,"High SYN rate from 10.10.10.6: SYN=50, ACK=0, ACK/SYN=0.00 in 1.0s"
+2026-05-02T09:39:20Z,ARP Spoofing,192.168.1.1,192.168.1.10,IP 192.168.1.1 changed MAC from 00:11:22:33:44:55 to aa:bb:cc:dd:ee:ff
