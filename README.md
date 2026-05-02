@@ -1,7 +1,3 @@
-Since you are looking for a clean, professional version to copy directly into a document or a GitHub README "Canvas," I’ve framed this to be more "human-centric"—focusing on the story of the project, the logic behind the code, and clear user guidance.
-
-***
-
 # 🛡️ Project: Sentinel NIDS
 ### *A Lightweight Python-Based Network Security Monitor*
 
