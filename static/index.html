@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sentinel NIDS Web Portal - Enterprise-grade real-time cybersecurity network traffic threat detection and PCAP analyzer dashboard.">
+    <title>Sentinel NIDS Control Portal</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="logo-area">
+                <span class="logo-icon">🛡️</span>
+                <div>
+                    <h1>SENTINEL NIDS</h1>
+                    <p class="subtitle">Cloud-Based Network Capture Analyzer & Threat Detector</p>
+                </div>
+            </div>
+            <div class="header-status">
+                <span class="status-indicator online" id="system-status-indicator"></span>
+                <span class="status-text" id="system-status-text">System Active</span>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="grid-container">
+            <!-- Sidebar Controls -->
+            <section class="card control-panel" id="controls-section">
+                <h2>Control Console</h2>
+                
+                <!-- Sensitivity Profile -->
+                <div class="control-group">
+                    <label for="profile-select">Detection Sensitivity Profile</label>
+                    <div class="select-wrapper">
+                        <select id="profile-select">
+                            <option value="balanced" selected>Balanced Profile (Recommended)</option>
+                            <option value="sensitive">Sensitive Profile (Lab Environment)</option>
+                            <option value="strict">Strict Profile (High Traffic)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Simulation Trigger -->
+                <div class="control-group">
+                    <label>Simulated Intrusion Test</label>
+                    <button class="btn btn-secondary btn-full" id="btn-run-simulation">
+                        <span>🚀</span> Run Threat Simulation Replay
+                    </button>
+                    <p class="help-text">Processes the prebuilt PCAP containing Port Scans, SYN Floods, and ARP Spoofing attacks.</p>
+                </div>
+
+                <!-- Drag & Drop Zone -->
+                <div class="control-group">
+                    <label>Upload Network Capture</label>
+                    <div class="drop-zone" id="pcap-drop-zone">
+                        <div class="drop-zone-content">
+                            <span class="drop-zone-icon">📥</span>
+                            <p class="drop-zone-text">Drag & Drop PCAP File Here</p>
+                            <span class="drop-zone-subtext">or click to browse from files</span>
+                            <input type="file" id="pcap-file-input" accept=".pcap,.pcapng" class="file-input-hidden">
+                        </div>
+                    </div>
+                    <div class="progress-bar-container hidden" id="upload-progress-container">
+                        <div class="progress-bar" id="upload-progress"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Metrics Overview -->
+            <section class="metrics-grid">
+                <!-- Stat Card 1 -->
+                <div class="metric-card stat-packets">
+                    <div class="metric-icon">📦</div>
+                    <div class="metric-info">
+                        <h3>Packets Processed</h3>
+                        <span class="metric-value counter" id="stat-total-packets">0</span>
+                    </div>
+                </div>
+                <!-- Stat Card 2 -->
+                <div class="metric-card stat-alerts">
+                    <div class="metric-icon">⚠️</div>
+                    <div class="metric-info">
+                        <h3>Threats Blocked</h3>
+                        <span class="metric-value counter text-alert" id="stat-total-alerts">0</span>
+                    </div>
+                </div>
+                <!-- Stat Card 3 -->
+                <div class="metric-card stat-portscan">
+                    <div class="metric-icon">🔍</div>
+                    <div class="metric-info">
+                        <h3>Port Scans</h3>
+                        <span class="metric-value counter" id="stat-port-scans">0</span>
+                    </div>
+                </div>
+                <!-- Stat Card 4 -->
+                <div class="metric-card stat-synflood">
+                    <div class="metric-icon">🔥</div>
+                    <div class="metric-info">
+                        <h3>SYN Floods</h3>
+                        <span class="metric-value counter" id="stat-syn-floods">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts and Visuals -->
+            <section class="card visual-analytics" id="analytics-section">
+                <h2>Visual Analytics</h2>
+                <div class="charts-container">
+                    <div class="chart-wrapper">
+                        <h4>Traffic Protocol Distribution</h4>
+                        <canvas id="protocol-chart"></canvas>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h4>Threat Composition</h4>
+                        <canvas id="threat-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Alert Stream Terminal -->
+            <section class="card terminal-section" id="terminal-section">
+                <div class="card-header-flex">
+                    <h2>NIDS System Live Engine Log</h2>
+                    <button class="btn btn-clear-terminal" id="btn-clear-logs">Clear Screen</button>
+                </div>
+                <div class="terminal-body" id="terminal-console">
+                    <div class="terminal-line system-msg">[SYSTEM] Ready. Select profile and load a PCAP file to initiate threat assessment.</div>
+                </div>
+            </section>
+
+            <!-- Alert Records Database -->
+            <section class="card database-section" id="database-section">
+                <h2>Intrusion Alert Logs</h2>
+                <div class="table-container">
+                    <table class="alert-table" id="alerts-data-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Severity</th>
+                                <th>Alert Type</th>
+                                <th>Source IP</th>
+                                <th>Destination IP</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="alerts-table-body">
+                            <tr class="empty-row">
+                                <td colspan="6">No alerts loaded. Analyze a PCAP capture file or click "Run Threat Simulation".</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <p>Sentinel Network Intrusion Detection System &copy; 2026. Made with ❤️ by Srinivas</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
