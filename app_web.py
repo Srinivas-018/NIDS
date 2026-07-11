@@ -172,14 +172,7 @@ async def api_replay_test(
 async def health():
     return {"status": "healthy", "service": "Sentinel NIDS Web App"}
 
-# Serve Frontend static files for Render and local environments
-static_path = os.path.join(os.path.dirname(__file__), "static")
-if os.path.isdir(static_path):
-    app.mount("/static", StaticFiles(directory="static"), name="static")
-
-@app.get("/")
-async def get_index():
-    index_file = os.path.join(static_path, "index.html")
-    if os.path.exists(index_file):
-        return FileResponse(index_file)
-    return JSONResponse(content={"message": "Sentinel NIDS API is running. Static UI not built yet."}, status_code=200)
+# Serve Frontend static files from 'public' folder
+public_path = os.path.join(os.path.dirname(__file__), "public")
+if os.path.isdir(public_path):
+    app.mount("/", StaticFiles(directory="public", html=True), name="public")

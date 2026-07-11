@@ -159,6 +159,10 @@ body {
     border-color: rgba(255, 255, 255, 0.15);
 }
 
+.card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
 .card h2 {
     font-family: var(--font-heading);
     font-size: 1.3rem;
